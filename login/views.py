@@ -184,7 +184,7 @@ class Forgot_view(View):
                 # if 'otp' in request.session and 'email' in request.session:
                 #     print('Session data saved:', request.session['otp'], request.session['email'])
                 # else:
-                #     print('Session data not saved.') 
+                #     print('Session data not saved.')
 
                 subject = 'Your One-Time Password (OTP) for Secure Access'
                 message = f'''Dear User,
@@ -341,7 +341,7 @@ class Forgot2_view(View):
                 del request.session['email']
                 return JsonResponse({'message': 'Password updated successfully'}, status=200)
 
-            return JsonResponse({'error': 'User not found'}, status=404)  
+            return JsonResponse({'error': 'User not found'}, status=404)
 
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
@@ -1860,7 +1860,7 @@ class ResendConsultantOtpView(View):
 class ResetPasswordConsultantView(View):
     def post(self, request):
         try:
-            data = json.loads(request.body.decode('utf-8')) 
+            data = json.loads(request.body.decode('utf-8'))
             form = Forgot2Form(data)
 
             if not form.is_valid():
