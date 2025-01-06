@@ -1263,7 +1263,7 @@ class Company_Forgot_view(View):
                 # if 'otp' in request.session and 'email' in request.session:
                 #     print('Session data saved:', request.session['otp'], request.session['email'])
                 # else:
-                #     print('Session data not saved.') 
+                #     print('Session data not saved.')
 
                 subject = 'Your One-Time Password (OTP) for Secure Access'
                 message = f'''Dear User,
