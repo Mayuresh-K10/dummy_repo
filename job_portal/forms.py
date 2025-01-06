@@ -188,5 +188,5 @@ class AdvertisementForm1(forms.ModelForm):
     class Meta:
         model = CollegeAdvertisement
         fields = ['name', 'email', 'contact', 'advertisement_placement', 'time_duration', 'investment_cost', 'target_audience']
-        
+
 

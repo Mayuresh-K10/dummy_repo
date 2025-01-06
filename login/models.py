@@ -1,7 +1,6 @@
-from datetime import timedelta
 from django.contrib.auth.models import AbstractUser # type: ignore
 from django.db import models # type: ignore
-from django.utils.timezone import now  # type: ignore
+
 
 class CustomUser(AbstractUser):
     is_subadmin = models.BooleanField(default=False)

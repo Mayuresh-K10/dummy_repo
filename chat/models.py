@@ -1,6 +1,6 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.db import models # type: ignore
+from django.contrib.auth.models import User # type: ignore
+from django.utils.timezone import now # type: ignore
 
 class Message(models.Model):
     sender_email = models.EmailField()

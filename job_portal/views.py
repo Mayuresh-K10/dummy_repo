@@ -264,7 +264,7 @@ def job_detail(request, job_id):
 def apply_job(request, job_id, company_in_charge_id):
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-    
+
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
         return JsonResponse({'error': 'Token is missing or invalid format'}, status=400)
@@ -273,7 +273,7 @@ def apply_job(request, job_id, company_in_charge_id):
 
     try:
         company_in_charge = CompanyInCharge.objects.get(id=company_in_charge_id, token=token)
-        
+
         json_data = json.loads(request.POST.get('data', '{}'))
         job = get_object_or_404(Job, id=job_id, company_in_charge=company_in_charge)
 
@@ -654,11 +654,11 @@ def create_user_resume(request, user_id):
 
                 else:
                     return JsonResponse({'status': 'error', 'errors': resume_form.errors}, status=400)
-                
+
                 education_data = json.loads(request.POST.get('education', '[]'))
                 if not education_data:
                     return JsonResponse({'status': 'error', 'message': 'Education data is required'}, status=400)
-                
+
                 for entry in education_data:
                     required_fields = ['course_or_degree', 'school_or_university', 'grade_or_cgpa', 'start_date', 'end_date','description']
                     for field in required_fields:
@@ -678,7 +678,7 @@ def create_user_resume(request, user_id):
                         objective.resume = resume
                         objective.user = user_instance
                         objective.save()
-                
+
                 elif hasattr(resume, 'objective') and resume.objective:
                     resume.objective.delete()
 
@@ -1987,7 +1987,7 @@ def create_job_for_college(request, university_incharge_id):
                 college = College.objects.get(id=college_id, university_in_charge=university_in_charge)
             except College.DoesNotExist:
                 return JsonResponse({'error': 'College not found'}, status=404)
-            
+
             if Job1.objects.filter(college=college).count() >= 100:
                 return JsonResponse({'message': 'Limit exceeded for job postings by this company'}, status=200)
 
@@ -2221,7 +2221,7 @@ def student_enquiries(request, college_id, university_in_charge_id):
            university_in_charge = UniversityInCharge.objects.get(id=university_in_charge_id)
         except UniversityInCharge.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'University in charge not found'}, status=404)
-        
+
         jobs = StudentEnquiry.objects.filter(college_id=college_id,university_in_charge=university_in_charge).values('first_name','last_name','course','status')
 
         if not jobs:
@@ -2509,7 +2509,7 @@ def schedule_interview_from_company(request, company_in_charge_id):
 def get_upcoming_interviews_from_company(request, company_in_charge_id):
     if request.method != "GET":
         return JsonResponse({'error': 'Invalid request method. Please use GET.'}, status=405)
-    
+
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
         return JsonResponse({'status': 'error', 'message': 'Token is missing or in an invalid format'}, status=400)
@@ -2822,7 +2822,7 @@ def create_jobseeker_resume(request, jobseeker_id):
             with transaction.atomic():
                 jobseeker_instance = get_object_or_404(JobSeeker, id=jobseeker_id)
                 jobseeker_email = request.POST.get('email')
-                
+
                 if not jobseeker_email:
                     return JsonResponse({'status': 'error', 'message': 'Email is required'}, status=400)
 
@@ -2831,7 +2831,7 @@ def create_jobseeker_resume(request, jobseeker_id):
 
                 resume = JobSeeker_Resume.objects.filter(email=jobseeker_email, job_seeker=jobseeker_instance).first()
                 resume_form = JobseekerResumeForm(request.POST, request.FILES, instance=resume)
-                
+
                 if resume_form.is_valid():
                     resume = resume_form.save(commit=False)
                     resume.job_seeker = jobseeker_instance
@@ -2848,14 +2848,14 @@ def create_jobseeker_resume(request, jobseeker_id):
                         resume.Attachment = None
                         resume.save()
                         return JsonResponse({'status': 'success', 'message': 'Attachment deleted successfully', 'resume_id': resume.id})
-                    
+
                 else:
                     return JsonResponse({'status': 'error', 'errors': resume_form.errors}, status=400)
 
                 education_data = json.loads(request.POST.get('education', '[]'))
                 if not education_data:
                     return JsonResponse({'status': 'error', 'message': 'Education data is required'}, status=400)
-                
+
                 for entry in education_data:
                     required_fields = ['course_or_degree', 'school_or_university', 'grade_or_cgpa', 'start_date', 'end_date', 'description']
                     for field in required_fields:
@@ -2869,13 +2869,13 @@ def create_jobseeker_resume(request, jobseeker_id):
                 if objective_data:
                     objective_instance = resume.objective if hasattr(resume, 'objective') else None
                     objective_form = JobseekerObjectiveForm(objective_data, instance=objective_instance)
-                    
+
                     if objective_form.is_valid():
                         objective = objective_form.save(commit=False)
                         objective.resume = resume
                         objective.job_seeker = jobseeker_instance
                         objective.save()
-                
+
                 elif hasattr(resume, 'objective') and resume.objective:
                     resume.objective.delete()
 
@@ -2918,7 +2918,7 @@ def create_jobseeker_resume(request, jobseeker_id):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
-   
+
 def get_jobseeker_resume_detail_by_id(request, jobseeker_id):
     auth_header = request.headers.get('Authorization')
 
@@ -3962,7 +3962,7 @@ def fetch_company_job_applications(request, company_in_charge_id, job_id):
 
     try:
         job = get_object_or_404(Job, company_in_charge=company_in_charge, unique_job_id_as_int=job_id)
-        
+
         applications = Application.objects.filter(job=job)
 
         applications_list = [{
@@ -4196,7 +4196,7 @@ def update_company_application_status(request, company_in_charge_id, application
                     "message": f"Your application for {application.job.job_title} has been updated to {application.status} by {application.company_in_charge}",
                 },
             )
-            
+
         if application.user:
             async_to_sync(channel_layer.group_send)(
                 f"notifications_{application.user.token}",

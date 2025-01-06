@@ -1,10 +1,8 @@
-import random
-from time import timezone
 from django.http import JsonResponse # type: ignore
 from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
 from django.middleware.csrf import get_token # type: ignore
-from django.views.decorators.csrf import csrf_exempt, csrf_protect # type: ignore
+from django.views.decorators.csrf import csrf_exempt # type: ignore
 from .utils import (send_data_to_google_sheet3,send_data_to_google_sheet4,
 send_data_to_google_sheet2, send_data_to_google_sheet5,send_data_to_google_sheets)
 import secrets,json # type: ignore
@@ -15,7 +13,6 @@ from django.views import View # type: ignore
 from .forms import ( JobSeekerRegistrationForm, UniversityInChargeForm,CompanyInChargeForm,ForgotForm,
 SubscriptionForm1,ConsultantForm,Forgot2Form
 ,VerifyForm,SubscriptionForm)
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger # type: ignore
 from django.core.mail import EmailMessage # type: ignore
 from django.utils.crypto import get_random_string # type: ignore
 
@@ -180,7 +177,7 @@ class Forgot_view(View):
 
                 new_otp = ''.join([str(secrets.randbelow(10)) for _ in range(4)])
                 request.session['otp'] = new_otp
-                
+
                 request.session['email'] = EMAIL
                 request.session.save()
 
@@ -987,7 +984,6 @@ class JobSeekerLogoutView(View):
             return JsonResponse({'error': 'Invalid JSON or token'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-        
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ChangePasswordJobSeekerView(View):
@@ -1091,13 +1087,13 @@ class ChangePasswordUniversityInChargeView(View):
             university = UniversityInCharge.objects.filter(official_email=email, token=token).first()
             if not university:
                 return JsonResponse({'error': 'Invalid token'}, status=404)
-            
+
             if not check_password(old_password, university.password):
                 return JsonResponse({'error': 'Old password is incorrect'}, status=400)
 
             university.password = make_password(new_password)
             university.save()
-            
+
             return JsonResponse({'success': True, 'message': 'Password changed successfully'}, status=200)
 
         except json.JSONDecodeError:
@@ -1129,13 +1125,13 @@ class ChangePasswordConsultantView(View):
             consultant = Consultant.objects.filter(official_email=email, token=token).first()
             if not consultant :
                 return JsonResponse({'error': 'Invalid token'}, status=404)
-            
+
             if not check_password(old_password, consultant.password):
                 return JsonResponse({'error': 'Old password is incorrect'}, status=400)
 
             consultant.password = make_password(new_password)
             consultant.save()
-            
+
             return JsonResponse({'success': True, 'message': 'Password changed successfully'}, status=200)
 
         except json.JSONDecodeError:
@@ -1243,7 +1239,6 @@ class DeleteConsultantAccountView(View):
             return JsonResponse({'error': str(e)}, status=500)
 
 ##with session
-       
 @method_decorator(csrf_exempt, name='dispatch')
 class Company_Forgot_view(View):
     def post(self, request):
@@ -1261,7 +1256,7 @@ class Company_Forgot_view(View):
 
                 new_otp = ''.join([str(secrets.randbelow(10)) for _ in range(4)])
                 request.session['otp'] = new_otp
-                
+
                 request.session['email'] = EMAIL
                 request.session.save()
 
@@ -1389,8 +1384,8 @@ class CompanyForgot2_view(View):
                 return JsonResponse({'error': 'Passwords did not match'}, status=400)
 
             stored_email = request.session.get('email')
-          
-            company = CompanyInCharge.objects.filter(official_email=stored_email).first()  
+
+            company = CompanyInCharge.objects.filter(official_email=stored_email).first()
 
             if company:
                 company.password = make_password(password)
@@ -1398,7 +1393,7 @@ class CompanyForgot2_view(View):
                 del request.session['email']
                 return JsonResponse({'message': 'Password has been reset successfully'}, status=200)
 
-            return JsonResponse({'error': 'Company not found'}, status=404)  
+            return JsonResponse({'error': 'Company not found'}, status=404)
 
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
@@ -1893,5 +1888,4 @@ class ResetPasswordConsultantView(View):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-			     
-        
+
