@@ -63,5 +63,4 @@ def clean_email(self):
         if JobSeeker.objects.filter(email=email).exists():
          raise forms.ValidationError("Email already in use.")
         return email
-   
- 
+

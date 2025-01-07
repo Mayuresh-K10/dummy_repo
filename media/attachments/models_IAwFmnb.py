@@ -59,7 +59,7 @@ class CompanyInCharge(models.Model):
     company_person_name = models.CharField(max_length=255,default="Null")
     agreed_to_terms = models.BooleanField(default=False)
     token = models.CharField(max_length=255, blank=True, null=True)
-   
+
 
 
 
@@ -73,7 +73,7 @@ class UniversityInCharge(models.Model):
     college_person_name = models.CharField(max_length=255,default="Null")
     agreed_to_terms = models.BooleanField(default=False)
     token = models.CharField(max_length=255, blank=True, null=True)
- 
+
 
 class Consultant(models.Model):
     consultant_name = models.CharField(max_length=255,default="Null")
@@ -85,7 +85,7 @@ class Consultant(models.Model):
     consultant_person_name = models.CharField(max_length=255,default="Null")
     agreed_to_terms = models.BooleanField(default=False)
     token = models.CharField(max_length=255, blank=True, null=True)
-    
+
 
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
